@@ -109,7 +109,7 @@ Each request prints one line to the server's console: the timestamp in ISO-8601 
 2026-11-23T10:23:45.123Z GET /hello
 ```
 
-The timestamp is the current time, so it normally varies between requests, though requests handled within the same millisecond print identical lines. The query string is not printed. Characters in the method or path outside printable ASCII are printed escaped — `\xNN` for a value up to `0xFF`, `\uNNNN` above it — so a request that carries a non-printable or non-ASCII character still prints as exactly one line.
+The timestamp is the current time, so it normally varies between requests, though requests handled within the same millisecond print identical lines. The query string is not printed. A request target that carries a byte outside printable ASCII is rejected by Node's own HTTP parser with `400 Bad Request` before the server's handler runs, so it produces no log line at all.
 
 # Shutdown
 
@@ -144,3 +144,5 @@ Invalid PORT value "80": expected an integer between 1024 and 65535. Set PORT to
 ```
 
 The same message appears for values such as `abc` or `70000`, and an empty `PORT=` is rejected the same way; only an unset `PORT` falls back to `3000`.
+
+Characters in the rejected value that fall outside printable ASCII are printed escaped in that message — `\xNN` for a value up to `0xFF`, `\uNNNN` above it — so the message stays on one line whatever value was set.
