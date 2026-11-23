@@ -52,11 +52,12 @@ function resolvePort(rawValue) {
 
   // Validated before binding: a port outside the range either needs privileges or
   // cannot be listened on, so the value is reported instead of attempted.
-  const port = /^[0-9]+$/.test(rawValue) ? Number(rawValue) : NaN;
+  const value = rawValue.trim();
+  const port = /^[0-9]+$/.test(value) ? Number(value) : NaN;
   if (!Number.isInteger(port) || port < MIN_PORT || port > MAX_PORT) {
     throw new Error(
-      `Invalid PORT value "${rawValue}": expected an integer between 1024 and 65535. ` +
-        'Set PORT to a port in that range, or unset it to use the default 3000.'
+      `Invalid PORT value "${rawValue}": expected an integer between ${MIN_PORT} and ${MAX_PORT}. ` +
+        `Set PORT to a port in that range, or unset it to use the default ${DEFAULT_PORT}.`
     );
   }
 
