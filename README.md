@@ -109,7 +109,7 @@ Each request prints one line to the server's console: the timestamp in ISO-8601 
 2026-11-23T10:23:45.123Z GET /hello
 ```
 
-The timestamp is the current time, so it normally varies between requests, though requests handled within the same millisecond print identical lines. The query string is not printed.
+The timestamp is the current time, so it normally varies between requests, though requests handled within the same millisecond print identical lines. The query string is not printed. Characters in the method or path outside printable ASCII are printed escaped — `\xNN` for a value up to `0xFF`, `\uNNNN` above it — so a request that carries a non-printable or non-ASCII character still prints as exactly one line.
 
 # Shutdown
 
