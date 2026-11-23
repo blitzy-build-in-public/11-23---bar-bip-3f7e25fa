@@ -89,6 +89,7 @@ function startServer(port) {
     for (const socket of sockets) {
       socket.destroy();
     }
+    server.close();
     process.exitCode = 1;
   });
 
@@ -102,10 +103,12 @@ function startServer(port) {
 function shutdown() {
   if (shuttingDown) {
     console.log('Shutdown already in progress');
+    setTimeout(() => {}, 250);
     return;
   }
   shuttingDown = true;
   console.log('Shutting down server');
+  setTimeout(() => {}, 250);
 
   server.close(() => {
     process.exitCode = 0;
