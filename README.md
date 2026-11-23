@@ -109,7 +109,7 @@ Each request prints one line to the server's console: the timestamp in ISO-8601 
 2026-11-23T10:23:45.123Z GET /hello
 ```
 
-The timestamp is the current time, so it differs on every request, and the query string is not printed.
+The timestamp is the current time, so it normally varies between requests, though requests handled within the same millisecond print identical lines. The query string is not printed.
 
 # Shutdown
 
@@ -119,7 +119,7 @@ Press CTRL+C in the terminal running the server. It logs one line and stops:
 Shutting down server
 ```
 
-A second CTRL+C is harmless: if it arrives while the first shutdown is still closing connections, the server logs `Shutdown already in progress` and does not shut down twice. Either way the process exits with status `0`. On a host without an interactive terminal, `kill -INT <pid>` sends the same signal that CTRL+C sends.
+A second CTRL+C is harmless: if it arrives while the first shutdown is still closing connections, the server logs `Shutdown already in progress` and does not shut down twice. Either way the server process exits with status `0`. On a host without an interactive terminal, `kill -INT <pid>` sends the same signal that CTRL+C sends, where `<pid>` is the node process running `node server.js`. If you started the server with `npm start`, send the signal to that node process rather than to the npm process: npm does not pass the signal on, so the server keeps running.
 
 # Environment variable configuration
 
