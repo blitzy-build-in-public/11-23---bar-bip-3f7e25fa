@@ -24,8 +24,15 @@ function sendText(res, statusCode, body) {
   res.end(body);
 }
 
+function escapeNonPrintable(value) {
+  return value.replace(/[^\x20-\x7E]/g, (char) => {
+    const code = char.charCodeAt(0);
+    return code > 0xff ? `\\u${code.toString(16).padStart(4, '0')}` : `\\x${code.toString(16).padStart(2, '0')}`;
+  });
+}
+
 function logRequest(req, pathname) {
-  console.log(`${new Date().toISOString()} ${req.method} ${pathname}`);
+  console.log(`${new Date().toISOString()} ${escapeNonPrintable(req.method)} ${escapeNonPrintable(pathname)}`);
 }
 
 function handleHello(req, res) {
@@ -56,7 +63,7 @@ function resolvePort(rawValue) {
   const port = /^[0-9]+$/.test(value) ? Number(value) : NaN;
   if (!Number.isInteger(port) || port < MIN_PORT || port > MAX_PORT) {
     throw new Error(
-      `Invalid PORT value "${rawValue}": expected an integer between ${MIN_PORT} and ${MAX_PORT}. ` +
+      `Invalid PORT value "${escapeNonPrintable(rawValue)}": expected an integer between ${MIN_PORT} and ${MAX_PORT}. ` +
         `Set PORT to a port in that range, or unset it to use the default ${DEFAULT_PORT}.`
     );
   }
